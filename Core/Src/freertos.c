@@ -192,7 +192,9 @@ void StartLedTask1(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    GPIOD->ODR ^= (1 << 15);
+
+    osDelay(500);
   }
   /* USER CODE END StartLedTask1 */
 }
@@ -210,7 +212,9 @@ void StartLedTask2(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    GPIOD->ODR ^= (1 << 14);
+
+    osDelay(1000);
   }
   /* USER CODE END StartLedTask2 */
 }
