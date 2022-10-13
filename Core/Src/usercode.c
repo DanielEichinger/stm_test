@@ -129,14 +129,21 @@ void receiveTask() {
 }
 
 void ext9Interrupt() {
-
+/*
   printf("Signal im Interrupt registriert\n");
   //interruptTickCount = osKernelGetTickCount();
   interruptTimestamp = getTimestamp();
 
   osEventFlagsSet(interruptEventsHandle, 0x1);
+*/
 
+  printf("HEY:D\n");
 }
+
+void ext15Interrupt(){
+  printf("angekommen\n");
+}
+
 
 void tim3Interrupt() {
   microtics++;

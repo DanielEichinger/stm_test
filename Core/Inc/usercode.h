@@ -20,6 +20,7 @@ void sendTask();
 void receiveTask();
 
 void ext9Interrupt();
+void ext15Interrupt();
 
 extern uint32_t microtics;
 void tim3Interrupt();
