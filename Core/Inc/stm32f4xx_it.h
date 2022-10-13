@@ -27,7 +27,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
- uint32_t microtics;
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

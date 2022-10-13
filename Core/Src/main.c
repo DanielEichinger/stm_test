@@ -24,7 +24,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "stdio.h"
+#include "usercode.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -57,16 +57,7 @@ void MX_FREERTOS_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-int _write(int file, char *ptr, int len) {
-  /* Implement your write code here, this is used by puts and printf for example */
-  int i;
-  for(i=0 ; i<len ; i++)
-    ITM_SendChar((*ptr++));
-  return len;
-}
 
-//uint32_t interruptTickCount;
-timestamp interruptTimestamp;
 
 /* USER CODE END 0 */
 
@@ -100,13 +91,7 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
-
-  // Compare Interrupt einschalten
-  TIM3->DIER |= TIM_DIER_CC1IE;
-
-  // Timer 3 starten
-  HAL_TIM_OC_Start(&htim3, TIM_CHANNEL_1);
-
+  beforeStart();
   /* USER CODE END 2 */
 
   /* Init scheduler */

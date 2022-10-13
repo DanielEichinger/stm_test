@@ -36,24 +36,11 @@ extern TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN Private defines */
 
-#define MICROTICS_DURATION_US 25000
-#define NANOTICS_DURATION_US  1/2
-
 /* USER CODE END Private defines */
 
 void MX_TIM3_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-extern uint32_t microtics;
-
-typedef struct timestamp {
-  uint32_t nanotics;
-  uint32_t microtics;
-} timestamp;
-
-timestamp getTimestamp();
-uint32_t timestampToMicroSeconds(timeStamp);
-timestamp timestampDifference(timestamp, timestamp);
 
 /* USER CODE END Prototypes */
 

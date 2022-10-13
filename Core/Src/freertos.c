@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include <stdio.h>
 #include <tim.h>
+#include <usercode.h>
 extern timestamp interruptTimestamp;
 /* USER CODE END Includes */
 
@@ -47,9 +48,7 @@ extern timestamp interruptTimestamp;
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
-timestamp sendTimestamp;
-timestamp receiveTimestamp;
-extern timestamp interruptTimestamp;
+
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -190,12 +189,7 @@ void StartLedTask1(void *argument)
 {
   /* USER CODE BEGIN StartLedTask1 */
   /* Infinite loop */
-  for(;;)
-  {
-    GPIOD->ODR ^= (1 << 15);
-
-    osDelay(500);
-  }
+  ledTask1();
   /* USER CODE END StartLedTask1 */
 }
 
@@ -209,13 +203,7 @@ void StartLedTask1(void *argument)
 void StartLedTask2(void *argument)
 {
   /* USER CODE BEGIN StartLedTask2 */
-  /* Infinite loop */
-  for(;;)
-  {
-    GPIOD->ODR ^= (1 << 14);
-
-    osDelay(1000);
-  }
+  ledTask2();
   /* USER CODE END StartLedTask2 */
 }
 
@@ -229,18 +217,7 @@ void StartLedTask2(void *argument)
 void StartSendTask(void *argument)
 {
   /* USER CODE BEGIN StartSendTask */
-
-  osDelay(2000);
-
-  printf("sende Signal\n");
-  sendTimestamp = getTimestamp();
-  GPIOD->BSRR = GPIO_BSRR_BS11;
-  /* Infinite loop */
-  for(;;)
-  {
-
-    osDelay(1000);
-  }
+  sendTask();
   /* USER CODE END StartSendTask */
 }
 
@@ -254,69 +231,7 @@ void StartSendTask(void *argument)
 void StartReceiveTask(void *argument)
 {
   /* USER CODE BEGIN StartReceiveTask */
-
-  /*
-  uint16_t signal;
-
-  for(;;)
-  {
-    signal = (uint16_t)GPIOD->IDR;
-
-    if (signal & GPIO_IDR_ID10) {
-      printf("Signal da: %x\n");
-    } else {
-      printf("Signal nicht da: %x\n");
-    }
-
-    osDelay(500);
-  }
-
-  */
-
-  osEventFlagsWait(interruptEventsHandle, 0x1, osFlagsWaitAll, osWaitForever);
-
-  receiveTimestamp = getTimestamp();
-  printf("Signal im Task angekommen\n");
-
-  timestamp timeDiff = timestampDifference(receiveTimestamp, sendTimestamp);
-
-  printf("Time diff: %u us\n", timestampToMicroSeconds(timeDiff));
-
-  while (1) {
-
-    osDelay(10);
-  }
-  /*
-  osDelay(1000);
-
-  printf("---Timer Test---\n");
-
-  timestamp t, t_prev;
-  t_prev.microtics = 0;
-  t_prev.nanotics = 0;
-
-  timestamp t_diff;
-
-  while(1) {
-
-    t = getTimestamp();
-    printf("T - Microtics: %u, Nanotics: %u\n", t.microtics, t.nanotics);
-
-    if (t_prev.microtics != 0) {
-       t_diff = timestampDifference(t, t_prev);
-       printf("Diff: Microtics: %u, Nanotics: %u (%u us)\n",
-           t_diff.microtics, t_diff.nanotics, timestampToMicroSeconds(t_diff));
-    }
-
-    t_prev = t;
-
-
-
-    osDelay(10);
-  }
-  */
-
-
+  receiveTask();
   /* USER CODE END StartReceiveTask */
 }
 

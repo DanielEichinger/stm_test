@@ -22,10 +22,7 @@
 #include "stm32f4xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "cmsis_os.h"
-#include <stdio.h>
-extern osEventFlagsId_t interruptEventsHandle;
-#include "tim.h"
+#include "usercode.h"
 
 
 /* USER CODE END Includes */
@@ -176,13 +173,7 @@ void EXTI9_5_IRQHandler(void)
   /* USER CODE END EXTI9_5_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_9);
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
-
-  printf("Signal im Interrupt registriert\n");
-  //interruptTickCount = osKernelGetTickCount();
-  interruptTimestamp = getTimestamp();
-
-  osEventFlagsSet(interruptEventsHandle, 0x1);
-
+  ext9Interrupt();
   /* USER CODE END EXTI9_5_IRQn 1 */
 }
 
@@ -210,10 +201,7 @@ void TIM3_IRQHandler(void)
   /* USER CODE END TIM3_IRQn 0 */
   HAL_TIM_IRQHandler(&htim3);
   /* USER CODE BEGIN TIM3_IRQn 1 */
-
-  microtics++;
-
-
+  tim3Interrupt();
   /* USER CODE END TIM3_IRQn 1 */
 }
 

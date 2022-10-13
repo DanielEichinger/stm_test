@@ -22,46 +22,6 @@
 
 /* USER CODE BEGIN 0 */
 
-timestamp getTimestamp() {
-
-  timestamp t;
-
-  t.nanotics = TIM3->CNT;
-  t.microtics = microtics;
-
-  return t;
-}
-
-uint32_t timestampToMicroSeconds(timestamp t) {
-
-  return t.microtics * MICROTICS_DURATION_US + t.nanotics * NANOTICS_DURATION_US;
-
-}
-
-timestamp timestampDifference(timestamp t1, timestamp t2) {
-  // Sei t1 > t2
-
-  timestamp result;
-
-  if (t1.nanotics < t2.nanotics) {
-    timestamp t1_tmp = t1;
-
-    t1_tmp.microtics -= 1;
-    t1_tmp.nanotics += TIM3->ARR+1;
-
-    result.microtics = t1_tmp.microtics - t2.microtics;
-    result.nanotics = t1_tmp.nanotics - t2.nanotics;
-
-    return result;
-  }
-
-  result.microtics = t1.microtics - t2.microtics;
-  result.nanotics = t1.nanotics - t2.nanotics;
-
-  return result;
-}
-
-
 /* USER CODE END 0 */
 
 TIM_HandleTypeDef htim3;
