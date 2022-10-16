@@ -52,12 +52,12 @@ void ledTask2() {
 
 void sendTask() {
 
-  osDelay(2000);
+  // Warten bis Knopf gedrückt wurde
+  osEventFlagsWait(interruptEventsHandle, EVENT_BUTTON_PRESSED, osFlagsWaitAll, osWaitForever);
 
-  printf("sende Signal\n");
-  sendTimestamp = getTimestamp();
-  GPIOD->BSRR = GPIO_BSRR_BS11;
-  /* Infinite loop */
+  // Signal an anderen Mikrocontroller senden
+  GPIOD->BSRR = GPIO_BSRR_BS8;
+
   for(;;)
   {
 
@@ -138,6 +138,7 @@ void ext9Interrupt() {
 */
 
   printf("HEY:D\n");
+  osEventFlagsSet(interruptEventsHandle, EVENT_BUTTON_PRESSED);
 }
 
 void ext15Interrupt(){
