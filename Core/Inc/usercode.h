@@ -21,7 +21,7 @@ void ledTask2();
 void sendTask();
 void receiveTask();
 
-vodi ext1Interrupt();
+void ext1Interrupt();
 void ext9Interrupt();
 void ext15Interrupt();
 
