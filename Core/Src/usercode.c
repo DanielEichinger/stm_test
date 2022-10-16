@@ -7,6 +7,7 @@
 
 #include "usercode.h"
 
+#include <stdio.h>
 #include "tim.h"
 #include "cmsis_os2.h"
 
@@ -24,6 +25,7 @@ int _write(int file, char *ptr, int len) {
 }
 
 void beforeStart() {
+  printf("starte...\n");
   // Compare Interrupt einschalten
   TIM3->DIER |= TIM_DIER_CC1IE;
 
@@ -65,6 +67,10 @@ void sendTask() {
 }
 
 void receiveTask() {
+
+  while (1) {
+    osDelay(1000);
+  }
   /*
     uint16_t signal;
 
