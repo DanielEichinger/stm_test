@@ -21,6 +21,7 @@ void ledTask2();
 void sendTask();
 void receiveTask();
 
+vodi ext1Interrupt();
 void ext9Interrupt();
 void ext15Interrupt();
 
@@ -36,9 +37,9 @@ typedef struct timestamp {
   uint32_t microtics;
 } timestamp;
 
-extern timestamp sendTimestamp;
-extern timestamp receiveTimestamp;
-extern timestamp interruptTimestamp;
+extern timestamp timestamp1;
+extern timestamp timestamp2;
+
 
 extern osEventFlagsId_t interruptEventsHandle; //freertos.c (generiert)
 

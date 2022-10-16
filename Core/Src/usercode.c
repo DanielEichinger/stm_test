@@ -11,9 +11,8 @@
 #include "cmsis_os2.h"
 
 uint32_t microtics;
-timestamp sendTimestamp;
-timestamp receiveTimestamp;
-timestamp interruptTimestamp;
+timestamp timestamp1;
+timestamp timestamp2;
 
 
 int _write(int file, char *ptr, int len) {
@@ -128,6 +127,13 @@ void receiveTask() {
     */
 }
 
+void ext1Interrupt() {
+  timestamp2 = getTimestamp();
+
+  printf("timestamp1: %u\n", timestampToMicroSeconds(timestamp1));
+  printf("timestamp2: %u\n", timestampToMicroSeconds(timestamp2));
+}
+
 void ext9Interrupt() {
 /*
   printf("Signal im Interrupt registriert\n");
@@ -142,6 +148,7 @@ void ext9Interrupt() {
 }
 
 void ext15Interrupt(){
+  timestamp1 = getTimestamp();
   printf("angekommen\n");
 }
 
