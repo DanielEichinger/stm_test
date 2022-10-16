@@ -11,6 +11,8 @@
 #include "stdint.h"
 #include "cmsis_os2.h"
 
+#define EVENT_BUTTON_PRESSED 0x1
+
 int _write(int file, char *ptr, int len);
 void beforeStart();
 
