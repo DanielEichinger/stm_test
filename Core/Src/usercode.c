@@ -84,7 +84,7 @@ void ext1Interrupt() {
 
   printf("timestamp1: %u\n", timestampToMicroSeconds(timestamp1));
   printf("timestamp2: %u\n", timestampToMicroSeconds(timestamp2));
-  printf("difference: %u\n", timestampDifference(timestamp2, timestamp1));
+  printf("difference: %u\n", timestampToMicroSeconds(timestampDifference(timestamp2, timestamp1)));
 }
 
 void ext9Interrupt() {
