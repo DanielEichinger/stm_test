@@ -19,7 +19,7 @@ void beforeStart();
 void ledTask1();
 void ledTask2();
 void sendTask();
-void receiveTask();
+void busyTask();
 
 void ext1Interrupt();
 void ext9Interrupt();

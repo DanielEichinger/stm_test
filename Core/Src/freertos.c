@@ -78,10 +78,10 @@ const osThreadAttr_t SendTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for ReceiveTask */
-osThreadId_t ReceiveTaskHandle;
-const osThreadAttr_t ReceiveTask_attributes = {
-  .name = "ReceiveTask",
+/* Definitions for BusyTask */
+osThreadId_t BusyTaskHandle;
+const osThreadAttr_t BusyTask_attributes = {
+  .name = "BusyTask",
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
@@ -100,7 +100,7 @@ void StartDefaultTask(void *argument);
 void StartLedTask1(void *argument);
 void StartLedTask2(void *argument);
 void StartSendTask(void *argument);
-void StartReceiveTask(void *argument);
+void StartBusyTask(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -143,8 +143,8 @@ void MX_FREERTOS_Init(void) {
   /* creation of SendTask */
   SendTaskHandle = osThreadNew(StartSendTask, NULL, &SendTask_attributes);
 
-  /* creation of ReceiveTask */
-  ReceiveTaskHandle = osThreadNew(StartReceiveTask, NULL, &ReceiveTask_attributes);
+  /* creation of BusyTask */
+  BusyTaskHandle = osThreadNew(StartBusyTask, NULL, &BusyTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -221,18 +221,18 @@ void StartSendTask(void *argument)
   /* USER CODE END StartSendTask */
 }
 
-/* USER CODE BEGIN Header_StartReceiveTask */
+/* USER CODE BEGIN Header_StartBusyTask */
 /**
-* @brief Function implementing the ReceiveTask thread.
+* @brief Function implementing the BusyTask thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_StartReceiveTask */
-void StartReceiveTask(void *argument)
+/* USER CODE END Header_StartBusyTask */
+void StartBusyTask(void *argument)
 {
-  /* USER CODE BEGIN StartReceiveTask */
-  receiveTask();
-  /* USER CODE END StartReceiveTask */
+  /* USER CODE BEGIN StartBusyTask */
+  busyTask();
+  /* USER CODE END StartBusyTask */
 }
 
 /* Private application code --------------------------------------------------*/

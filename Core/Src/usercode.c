@@ -57,7 +57,7 @@ void sendTask() {
   osEventFlagsWait(interruptEventsHandle, EVENT_BUTTON_PRESSED, osFlagsWaitAll, osWaitForever);
 
   // Signal an anderen Mikrocontroller senden
-  GPIOD->BSRR = GPIO_BSRR_BS8;
+  GPIOD->BSRR = GPIO_BSRR_BS11;
 
   for(;;)
   {
@@ -66,72 +66,17 @@ void sendTask() {
   }
 }
 
-void receiveTask() {
+void busyTask() {
 
   while (1) {
-    osDelay(1000);
+
+    GPIOD->BSRR = GPIO_BSRR_BS8;
+    for (int i = 0; i < 0x2FFFFFF; i++){
+    }
+    GPIOD->BSRR = GPIO_BSRR_BR8;
+
+    osDelay(2000);
   }
-  /*
-    uint16_t signal;
-
-    for(;;)
-    {
-      signal = (uint16_t)GPIOD->IDR;
-
-      if (signal & GPIO_IDR_ID10) {
-        printf("Signal da: %x\n");
-      } else {
-        printf("Signal nicht da: %x\n");
-      }
-
-      osDelay(500);
-    }
-
-    */
-/*
-    osEventFlagsWait(interruptEventsHandle, 0x1, osFlagsWaitAll, osWaitForever);
-
-    receiveTimestamp = getTimestamp();
-    printf("Signal im Task angekommen\n");
-
-    timestamp timeDiff = timestampDifference(receiveTimestamp, sendTimestamp);
-
-    printf("Time diff: %u us\n", timestampToMicroSeconds(timeDiff));
-
-    while (1) {
-
-      osDelay(10);
-    }
-    */
-    /*
-    osDelay(1000);
-
-    printf("---Timer Test---\n");
-
-    timestamp t, t_prev;
-    t_prev.microtics = 0;
-    t_prev.nanotics = 0;
-
-    timestamp t_diff;
-
-    while(1) {
-
-      t = getTimestamp();
-      printf("T - Microtics: %u, Nanotics: %u\n", t.microtics, t.nanotics);
-
-      if (t_prev.microtics != 0) {
-         t_diff = timestampDifference(t, t_prev);
-         printf("Diff: Microtics: %u, Nanotics: %u (%u us)\n",
-             t_diff.microtics, t_diff.nanotics, timestampToMicroSeconds(t_diff));
-      }
-
-      t_prev = t;
-
-
-
-      osDelay(10);
-    }
-    */
 }
 
 void ext1Interrupt() {
