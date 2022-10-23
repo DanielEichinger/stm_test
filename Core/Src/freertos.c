@@ -85,11 +85,6 @@ const osThreadAttr_t BusyTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
-/* Definitions for interruptEvents */
-osEventFlagsId_t interruptEventsHandle;
-const osEventFlagsAttr_t interruptEvents_attributes = {
-  .name = "interruptEvents"
-};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -149,10 +144,6 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
-
-  /* Create the event(s) */
-  /* creation of interruptEvents */
-  interruptEventsHandle = osEventFlagsNew(&interruptEvents_attributes);
 
   /* USER CODE BEGIN RTOS_EVENTS */
   /* add events, ... */

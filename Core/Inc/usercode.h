@@ -40,7 +40,7 @@ typedef struct timestamp {
 extern timestamp timestamp1;
 extern timestamp timestamp2;
 
-
+extern osThreadId_t SendTaskHandle;
 extern osEventFlagsId_t interruptEventsHandle; //freertos.c (generiert)
 
 timestamp getTimestamp();
