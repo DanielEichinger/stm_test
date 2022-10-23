@@ -88,15 +88,7 @@ void ext1Interrupt() {
 }
 
 void ext9Interrupt() {
-/*
-  printf("Signal im Interrupt registriert\n");
-  //interruptTickCount = osKernelGetTickCount();
-  interruptTimestamp = getTimestamp();
-
-  osEventFlagsSet(interruptEventsHandle, 0x1);
-*/
-
-  printf("HEY:D\n");
+  printf("Knopf gedrückt\n");
   osEventFlagsSet(interruptEventsHandle, EVENT_BUTTON_PRESSED);
 }
 
