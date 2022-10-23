@@ -14,6 +14,8 @@
 #define EVENT_BUTTON_PRESSED 0x1
 
 int _write(int file, char *ptr, int len);
+extern uint32_t taskStatTicks;
+void setupTaskStatTimer();
 void beforeStart();
 
 void ledTask1();
@@ -27,6 +29,7 @@ void ext15Interrupt();
 
 extern uint32_t microtics;
 void tim3Interrupt();
+void tim6Interrupt();
 
 
 #define MICROTICS_DURATION_US 25000

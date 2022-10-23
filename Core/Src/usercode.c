@@ -11,6 +11,8 @@
 #include "tim.h"
 #include "cmsis_os2.h"
 
+uint32_t taskStatTicks;
+
 uint32_t microtics;
 timestamp timestamp1;
 timestamp timestamp2;
@@ -22,6 +24,14 @@ int _write(int file, char *ptr, int len) {
   for(i=0 ; i<len ; i++)
     ITM_SendChar((*ptr++));
   return len;
+}
+
+void setupTaskStatTimer() {
+
+  taskStatTicks = 0;
+
+  // Timer 6 starten
+  HAL_TIM_Base_Start_IT(&htim6);
 }
 
 void beforeStart() {
@@ -102,6 +112,10 @@ void tim3Interrupt() {
   microtics++;
 }
 
+void tim6Interrupt() {
+  taskStatTicks++;
+}
+
 
 timestamp getTimestamp() {
 
@@ -141,5 +155,3 @@ timestamp timestampDifference(timestamp t1, timestamp t2) {
 
   return result;
 }
-
-
