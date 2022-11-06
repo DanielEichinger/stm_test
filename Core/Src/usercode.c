@@ -63,14 +63,15 @@ void ledTask2() {
 
 void sendTask() {
 
-  // Warten bis Knopf gedrückt wurde
-  osThreadFlagsWait(EVENT_BUTTON_PRESSED, osFlagsWaitAll, osWaitForever);
-
-  // Signal an anderen Mikrocontroller senden
-  GPIOD->BSRR = GPIO_BSRR_BS11;
-
   for(;;)
   {
+    // Warten bis Knopf gedrückt wurde
+    osThreadFlagsWait(EVENT_BUTTON_PRESSED, osFlagsWaitAll, osWaitForever);
+
+    // Signal an anderen Mikrocontroller senden
+    GPIOD->BSRR = GPIO_BSRR_BS11;
+    osDelay(100);
+    GPIOD->BSRR = GPIO_BSRR_BR11;
 
     osDelay(1000);
   }
