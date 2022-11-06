@@ -13,6 +13,11 @@
 
 #define EVENT_BUTTON_PRESSED 0x1
 
+#define RESULT_BUFFER_LENGTH 400
+
+extern uint8_t resultBuffer[RESULT_BUFFER_LENGTH];
+extern uint32_t bufferPosition;
+
 int _write(int file, char *ptr, int len);
 extern uint32_t taskStatTicks;
 void setupTaskStatTimer();

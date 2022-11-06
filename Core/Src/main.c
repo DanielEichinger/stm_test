@@ -20,6 +20,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "tim.h"
+#include "usb_device.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/

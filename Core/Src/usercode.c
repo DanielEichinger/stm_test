@@ -10,12 +10,16 @@
 #include <stdio.h>
 #include "tim.h"
 #include "cmsis_os2.h"
+#include "usbd_cdc_if.h"
+#include <math.h>
 
 uint32_t taskStatTicks;
 
 uint32_t microtics;
 timestamp timestamp1;
 timestamp timestamp2;
+uint8_t resultBuffer[RESULT_BUFFER_LENGTH];
+uint32_t bufferPosition = 0;
 
 
 int _write(int file, char *ptr, int len) {
@@ -36,6 +40,7 @@ void setupTaskStatTimer() {
 
 void beforeStart() {
   printf("starte...\n");
+
   // Compare Interrupt einschalten
   TIM3->DIER |= TIM_DIER_CC1IE;
 
@@ -53,11 +58,19 @@ void ledTask1() {
 }
 
 void ledTask2() {
+
+  int i = 0;
+
   for(;;)
     {
+      i++;
       GPIOD->ODR ^= (1 << 14);
 
       osDelay(1000);
+
+      if(i == 10) {
+        CDC_Transmit_FS(resultBuffer, strlen(resultBuffer));
+      }
     }
 }
 
@@ -92,10 +105,21 @@ void busyTask() {
 
 void ext1Interrupt() {
   timestamp2 = getTimestamp();
+  timestamp timestampDiff = timestampDifference(timestamp2, timestamp1);
 
   printf("timestamp1: %u\n", timestampToMicroSeconds(timestamp1));
   printf("timestamp2: %u\n", timestampToMicroSeconds(timestamp2));
-  printf("difference: %u\n", timestampToMicroSeconds(timestampDifference(timestamp2, timestamp1)));
+  printf("difference: %u\n", timestampToMicroSeconds(timestampDiff));
+
+  // schreibe Zeitunterschied in Mikrosekunden in Buffer
+  sprintf(resultBuffer+bufferPosition, "%u", timestampToMicroSeconds(timestampDifference(timestamp2, timestamp1)));
+
+  // zähle Position um Anzahl der Stellen der Zahl weiter
+  bufferPosition+= ((uint32_t)(log10(timestampToMicroSeconds(timestampDiff))))+1;
+
+  // füge ";" als Trennzeichen ein
+  resultBuffer[bufferPosition] = ';';
+  bufferPosition++;
 }
 
 void ext9Interrupt() {
