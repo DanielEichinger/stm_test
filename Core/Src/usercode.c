@@ -20,6 +20,8 @@ timestamp timestamp1;
 timestamp timestamp2;
 uint8_t resultBuffer[RESULT_BUFFER_LENGTH];
 uint32_t bufferPosition = 0;
+uint8_t testsDone = 0;
+uint16_t counter = 0;
 
 
 int _write(int file, char *ptr, int len) {
@@ -39,13 +41,19 @@ void setupTaskStatTimer() {
 }
 
 void beforeStart() {
+
+
   printf("starte...\n");
+
 
   // Compare Interrupt einschalten
   TIM3->DIER |= TIM_DIER_CC1IE;
 
   // Timer 3 starten
   HAL_TIM_OC_Start(&htim3, TIM_CHANNEL_1);
+
+  TIM4->DIER |= TIM_DIER_CC1IE;
+  HAL_TIM_OC_Start(&htim4, TIM_CHANNEL_1);
 }
 
 void ledTask1() {
@@ -53,25 +61,17 @@ void ledTask1() {
   {
     GPIOD->ODR ^= (1 << 15);
 
-    osDelay(500);
+    osDelay(250);
   }
 }
 
 void ledTask2() {
-
-  int i = 0;
-
   for(;;)
-    {
-      i++;
-      GPIOD->ODR ^= (1 << 14);
+  {
+    GPIOD->ODR ^= (1 << 14);
 
-      osDelay(1000);
-
-      if(i == 10) {
-        CDC_Transmit_FS(resultBuffer, strlen(resultBuffer));
-      }
-    }
+    osDelay(500);
+  }
 }
 
 void sendTask() {
@@ -83,10 +83,10 @@ void sendTask() {
 
     // Signal an anderen Mikrocontroller senden
     GPIOD->BSRR = GPIO_BSRR_BS11;
-    osDelay(100);
+    osDelay(1);
     GPIOD->BSRR = GPIO_BSRR_BR11;
 
-    osDelay(1000);
+    //osDelay(1000);
   }
 }
 
@@ -94,35 +94,68 @@ void busyTask() {
 
   while (1) {
 
-    GPIOD->BSRR = GPIO_BSRR_BS8;
-    for (int i = 0; i < 0x2FFFFFF; i++){
-    }
-    GPIOD->BSRR = GPIO_BSRR_BR8;
+    //GPIOD->BSRR = GPIO_BSRR_BS8;
+    //for (int i = 0; i < 0x2FFFFFF; i++){
+    //}
+    //GPIOD->BSRR = GPIO_BSRR_BR8;
 
     osDelay(2000);
   }
 }
 
+void usbSerialTask() {
+
+  osThreadFlagsWait(EVENT_ALL_TESTS_DONE, osFlagsWaitAll, osWaitForever);
+
+  CDC_Transmit_FS(resultBuffer, strlen(resultBuffer));
+
+  while (1) {
+    osDelay(1000);
+  }
+}
+extern osThreadId_t StartTaskHandle;
+void startTask() {
+  beforeStart();
+  osThreadSuspend(StartTaskHandle);
+}
+
 void ext1Interrupt() {
-  timestamp2 = getTimestamp();
-  timestamp timestampDiff = timestampDifference(timestamp2, timestamp1);
 
-  printf("timestamp1: %u\n", timestampToMicroSeconds(timestamp1));
-  printf("timestamp2: %u\n", timestampToMicroSeconds(timestamp2));
-  printf("difference: %u\n", timestampToMicroSeconds(timestampDiff));
 
-  // schreibe Zeitunterschied in Mikrosekunden in Buffer
-  sprintf(resultBuffer+bufferPosition, "%u", timestampToMicroSeconds(timestampDifference(timestamp2, timestamp1)));
 
-  // zähle Position um Anzahl der Stellen der Zahl weiter
-  bufferPosition+= ((uint32_t)(log10(timestampToMicroSeconds(timestampDiff))))+1;
+  if (testsDone < NUM_OF_TESTS) {
+    timestamp2 = getTimestamp();
+    timestamp timestampDiff = timestampDifference(timestamp2, timestamp1);
+    uint32_t timestampDiffUs = timestampToMicroSeconds(timestampDiff);
 
-  // füge ";" als Trennzeichen ein
-  resultBuffer[bufferPosition] = ';';
-  bufferPosition++;
+    printf("timestamp1: %u, ", timestampToMicroSeconds(timestamp1));
+    printf("timestamp2: %u, ", timestampToMicroSeconds(timestamp2));
+    printf("diff: %u\n", timestampToMicroSeconds(timestampDiff));
+
+    // schreibe Zeitunterschied in Mikrosekunden in Buffer
+    sprintf(resultBuffer+bufferPosition, "%u", timestampDiffUs);
+
+    // zähle Position um Anzahl der Stellen der Zahl weiter
+    bufferPosition+= ((uint32_t)(log10(timestampDiffUs)))+1;
+
+    // füge ";" als Trennzeichen ein
+    resultBuffer[bufferPosition] = ';';
+    bufferPosition++;
+
+    testsDone++;
+  }
+  if (testsDone == NUM_OF_TESTS) {
+    resultBuffer[bufferPosition] = '\n';
+    osThreadFlagsSet(UsbSerialTaskHandle, EVENT_ALL_TESTS_DONE);
+    testsDone++;
+  }
+
 }
 
 void ext9Interrupt() {
+
+  counter++;
+
   printf("Knopf gedrueckt\n");
   osThreadFlagsSet(SendTaskHandle, EVENT_BUTTON_PRESSED);
 }

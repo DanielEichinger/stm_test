@@ -12,8 +12,16 @@
 #include "cmsis_os2.h"
 
 #define EVENT_BUTTON_PRESSED 0x1
+#define EVENT_ALL_TESTS_DONE 0x2
 
 #define RESULT_BUFFER_LENGTH 400
+
+#define DEBOUNCE_MS 100
+
+#define NUM_OF_TESTS 50
+
+extern uint8_t testsDone;
+extern uint16_t counter;
 
 extern uint8_t resultBuffer[RESULT_BUFFER_LENGTH];
 extern uint32_t bufferPosition;
@@ -27,6 +35,8 @@ void ledTask1();
 void ledTask2();
 void sendTask();
 void busyTask();
+void usbSerialTask();
+void startTask();
 
 void ext1Interrupt();
 void ext9Interrupt();
@@ -49,6 +59,7 @@ extern timestamp timestamp1;
 extern timestamp timestamp2;
 
 extern osThreadId_t SendTaskHandle;
+extern osThreadId_t UsbSerialTaskHandle;
 extern osEventFlagsId_t interruptEventsHandle; //freertos.c (generiert)
 
 timestamp getTimestamp();

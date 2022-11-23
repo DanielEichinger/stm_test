@@ -92,8 +92,9 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM3_Init();
   MX_TIM6_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
-  beforeStart();
+
   /* USER CODE END 2 */
 
   /* Init scheduler */

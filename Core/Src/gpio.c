@@ -47,7 +47,6 @@
      PC7   ------> I2S3_MCK
      PC10   ------> I2S3_CK
      PC12   ------> I2S3_SD
-     PB6   ------> I2C1_SCL
      PB9   ------> I2C1_SDA
 */
 void MX_GPIO_Init(void)
@@ -156,13 +155,13 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Alternate = GPIO_AF6_SPI3;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PBPin PBPin */
-  GPIO_InitStruct.Pin = Audio_SCL_Pin|Audio_SDA_Pin;
+  /*Configure GPIO pin : PtPin */
+  GPIO_InitStruct.Pin = Audio_SDA_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
   GPIO_InitStruct.Pull = GPIO_PULLUP;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   GPIO_InitStruct.Alternate = GPIO_AF4_I2C1;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+  HAL_GPIO_Init(Audio_SDA_GPIO_Port, &GPIO_InitStruct);
 
   /* EXTI interrupt init*/
   HAL_NVIC_SetPriority(EXTI1_IRQn, 5, 0);

@@ -85,6 +85,20 @@ const osThreadAttr_t BusyTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for UsbSerialTask */
+osThreadId_t UsbSerialTaskHandle;
+const osThreadAttr_t UsbSerialTask_attributes = {
+  .name = "UsbSerialTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
+/* Definitions for StartTask */
+osThreadId_t StartTaskHandle;
+const osThreadAttr_t StartTask_attributes = {
+  .name = "StartTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityNormal,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -96,6 +110,8 @@ void StartLedTask1(void *argument);
 void StartLedTask2(void *argument);
 void StartSendTask(void *argument);
 void StartBusyTask(void *argument);
+void StartUsbSerialTask(void *argument);
+void StartStartTask(void *argument);
 
 extern void MX_USB_DEVICE_Init(void);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
@@ -158,6 +174,12 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of BusyTask */
   BusyTaskHandle = osThreadNew(StartBusyTask, NULL, &BusyTask_attributes);
+
+  /* creation of UsbSerialTask */
+  UsbSerialTaskHandle = osThreadNew(StartUsbSerialTask, NULL, &UsbSerialTask_attributes);
+
+  /* creation of StartTask */
+  StartTaskHandle = osThreadNew(StartStartTask, NULL, &StartTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -244,6 +266,36 @@ void StartBusyTask(void *argument)
   /* USER CODE BEGIN StartBusyTask */
   busyTask();
   /* USER CODE END StartBusyTask */
+}
+
+/* USER CODE BEGIN Header_StartUsbSerialTask */
+/**
+* @brief Function implementing the UsbSerialTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartUsbSerialTask */
+void StartUsbSerialTask(void *argument)
+{
+  /* USER CODE BEGIN StartUsbSerialTask */
+  /* Infinite loop */
+  usbSerialTask();
+  /* USER CODE END StartUsbSerialTask */
+}
+
+/* USER CODE BEGIN Header_StartStartTask */
+/**
+* @brief Function implementing the StartTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartStartTask */
+void StartStartTask(void *argument)
+{
+  /* USER CODE BEGIN StartStartTask */
+  /* Infinite loop */
+  startTask();
+  /* USER CODE END StartStartTask */
 }
 
 /* Private application code --------------------------------------------------*/
