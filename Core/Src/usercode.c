@@ -81,7 +81,6 @@ void sendTask() {
 
     // Signal an anderen Mikrocontroller senden
     GPIOD->BSRR = GPIO_BSRR_BS11;
-    osDelay(1);
     GPIOD->BSRR = GPIO_BSRR_BR11;
   }
 }
