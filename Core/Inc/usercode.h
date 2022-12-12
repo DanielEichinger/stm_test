@@ -18,13 +18,12 @@
 
 #define DEBOUNCE_MS 100
 
-#define NUM_OF_TESTS 50
+#define NUM_OF_TESTS 10
 
 extern uint8_t testsDone;
 extern uint16_t counter;
 
-extern uint8_t resultBuffer[RESULT_BUFFER_LENGTH];
-extern uint32_t bufferPosition;
+extern uint32_t testResults[NUM_OF_TESTS];
 
 int _write(int file, char *ptr, int len);
 extern uint32_t taskStatTicks;

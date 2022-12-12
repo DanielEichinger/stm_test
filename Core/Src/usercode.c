@@ -18,10 +18,8 @@ uint32_t taskStatTicks;
 uint32_t microtics;
 timestamp timestamp1;
 timestamp timestamp2;
-uint8_t resultBuffer[RESULT_BUFFER_LENGTH];
-uint32_t bufferPosition = 0;
+uint32_t testResults[NUM_OF_TESTS];
 uint8_t testsDone = 0;
-uint16_t counter = 0;
 
 
 int _write(int file, char *ptr, int len) {
@@ -85,8 +83,6 @@ void sendTask() {
     GPIOD->BSRR = GPIO_BSRR_BS11;
     osDelay(1);
     GPIOD->BSRR = GPIO_BSRR_BR11;
-
-    //osDelay(1000);
   }
 }
 
@@ -95,11 +91,11 @@ void busyTask() {
   while (1) {
 
     //GPIOD->BSRR = GPIO_BSRR_BS8;
-    //for (int i = 0; i < 0x2FFFFFF; i++){
-    //}
+    for (int i = 0; i < 0x2FFFFFF; i++){
+    }
     //GPIOD->BSRR = GPIO_BSRR_BR8;
 
-    osDelay(2000);
+    //osDelay(2000);
   }
 }
 
@@ -107,7 +103,11 @@ void usbSerialTask() {
 
   osThreadFlagsWait(EVENT_ALL_TESTS_DONE, osFlagsWaitAll, osWaitForever);
 
-  CDC_Transmit_FS(resultBuffer, strlen(resultBuffer));
+  for (int i = 0; i < NUM_OF_TESTS; i++) {
+    printf("Test %d: %d\n", i, testResults[i]);
+  }
+
+  osThreadSuspend(UsbSerialTaskHandle);
 
   while (1) {
     osDelay(1000);
@@ -121,50 +121,27 @@ void startTask() {
 
 void ext1Interrupt() {
 
-
-
   if (testsDone < NUM_OF_TESTS) {
     timestamp2 = getTimestamp();
     timestamp timestampDiff = timestampDifference(timestamp2, timestamp1);
     uint32_t timestampDiffUs = timestampToMicroSeconds(timestampDiff);
 
-    printf("timestamp1: %u, ", timestampToMicroSeconds(timestamp1));
-    printf("timestamp2: %u, ", timestampToMicroSeconds(timestamp2));
-    printf("diff: %u\n", timestampToMicroSeconds(timestampDiff));
-
-    // schreibe Zeitunterschied in Mikrosekunden in Buffer
-    sprintf(resultBuffer+bufferPosition, "%u", timestampDiffUs);
-
-    // zähle Position um Anzahl der Stellen der Zahl weiter
-    bufferPosition+= ((uint32_t)(log10(timestampDiffUs)))+1;
-
-    // füge ";" als Trennzeichen ein
-    resultBuffer[bufferPosition] = ';';
-    bufferPosition++;
-
+    testResults[testsDone] = timestampDiffUs;
     testsDone++;
   }
   if (testsDone == NUM_OF_TESTS) {
-    resultBuffer[bufferPosition] = '\n';
     osThreadFlagsSet(UsbSerialTaskHandle, EVENT_ALL_TESTS_DONE);
     testsDone++;
   }
-
 }
 
 void ext9Interrupt() {
-
-  counter++;
-
-  printf("Knopf gedrueckt\n");
   osThreadFlagsSet(SendTaskHandle, EVENT_BUTTON_PRESSED);
 }
 
 void ext15Interrupt(){
   timestamp1 = getTimestamp();
-  printf("angekommen\n");
 }
-
 
 void tim3Interrupt() {
   microtics++;
@@ -173,7 +150,6 @@ void tim3Interrupt() {
 void tim6Interrupt() {
   taskStatTicks++;
 }
-
 
 timestamp getTimestamp() {
 
