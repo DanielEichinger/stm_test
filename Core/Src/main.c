@@ -95,6 +95,8 @@ int main(void)
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
 
+  vTraceEnable(TRC_START);
+
   /* USER CODE END 2 */
 
   /* Init scheduler */

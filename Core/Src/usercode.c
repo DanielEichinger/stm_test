@@ -90,11 +90,11 @@ void busyTask() {
   while (1) {
 
     //GPIOD->BSRR = GPIO_BSRR_BS8;
-    for (int i = 0; i < 0x2FFFFFF; i++){
-    }
+    //for (int i = 0; i < 0x2FFFFFF; i++){
+    //}
     //GPIOD->BSRR = GPIO_BSRR_BR8;
 
-    //osDelay(2000);
+    osDelay(2000);
   }
 }
 
