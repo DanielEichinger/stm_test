@@ -1,7 +1,7 @@
 #MicroXplorer Configuration settings - do not modify
 FREERTOS.FootprintOK=true
 FREERTOS.IPParameters=Tasks01,configUSE_NEWLIB_REENTRANT,FootprintOK,configGENERATE_RUN_TIME_STATS,configUSE_STATS_FORMATTING_FUNCTIONS,configRECORD_STACK_HIGH_ADDRESS
-FREERTOS.Tasks01=defaultTask,24,128,StartDefaultTask,Default,NULL,Dynamic,NULL,NULL;LedTask1,8,128,StartLedTask1,Default,NULL,Dynamic,NULL,NULL;LedTask2,8,128,StartLedTask2,Default,NULL,Dynamic,NULL,NULL;SendTask,8,128,StartSendTask,Default,NULL,Dynamic,NULL,NULL;BusyTask,8,128,StartBusyTask,Default,NULL,Dynamic,NULL,NULL;UsbSerialTask,8,128,StartUsbSerialTask,Default,NULL,Dynamic,NULL,NULL;StartTask,24,128,StartStartTask,Default,NULL,Dynamic,NULL,NULL
+FREERTOS.Tasks01=defaultTask,24,128,StartDefaultTask,Default,NULL,Dynamic,NULL,NULL;LedTask1,8,128,StartLedTask1,Default,NULL,Dynamic,NULL,NULL;LedTask2,8,128,StartLedTask2,Default,NULL,Dynamic,NULL,NULL;SendTask,40,128,StartSendTask,Default,NULL,Dynamic,NULL,NULL;BusyTask,8,128,StartBusyTask,Default,NULL,Dynamic,NULL,NULL;UsbSerialTask,8,128,StartUsbSerialTask,Default,NULL,Dynamic,NULL,NULL;StartTask,24,128,StartStartTask,Default,NULL,Dynamic,NULL,NULL
 FREERTOS.configGENERATE_RUN_TIME_STATS=1
 FREERTOS.configRECORD_STACK_HIGH_ADDRESS=1
 FREERTOS.configUSE_NEWLIB_REENTRANT=1

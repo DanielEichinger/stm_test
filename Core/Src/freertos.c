@@ -76,7 +76,7 @@ osThreadId_t SendTaskHandle;
 const osThreadAttr_t SendTask_attributes = {
   .name = "SendTask",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
+  .priority = (osPriority_t) osPriorityHigh,
 };
 /* Definitions for BusyTask */
 osThreadId_t BusyTaskHandle;
