@@ -95,7 +95,10 @@ void busyTask() {
     //}
     //GPIOD->BSRR = GPIO_BSRR_BR8;
 
-    osDelay(2000);
+    //osDelay(2000);
+
+    HAL_Delay(50);
+    osDelay(50);
   }
 }
 
